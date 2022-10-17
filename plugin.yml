@@ -1,0 +1,15 @@
+name: Repair
+main: roi611\Repair\Main
+version: 1.1.0
+api: 
+- 4.0.0
+- 5.0.0-ALPHA1
+load: POSTWORLD
+author: roi611
+description: "コマンドで修理できるよ"
+
+commands:
+ repair:
+  description: "ui修理"
+  usage: "/repair"
+  permission: pocketmine.group.user
