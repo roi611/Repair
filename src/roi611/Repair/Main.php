@@ -19,9 +19,9 @@ use form\ModalForm;
 
 class Main extends PluginBase {
 
+    private $config;
     public function onEnable():void{
         
-        $this->EconomyAPI = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
         $this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML, array(
             'money' => '15000'
         ));
@@ -37,8 +37,9 @@ class Main extends PluginBase {
 
         }
 
+        $api = EconomyAPI::getInstance();
         $pay = $this->config->get("money");
-        $have = EconomyAPI::getInstance()->myMoney($sender);
+        $have = $api->myMoney($sender);
 
         if ($have < $pay) {
             $sender->sendMessage("§eお金が足りません");
@@ -59,7 +60,7 @@ class Main extends PluginBase {
                 
         $form = new ModalForm;
         $form->setTitle("UIRepair");
-        $unit = EconomyAPI::getInstance()->getMonetaryUnit();
+        $unit = $api->getMonetaryUnit();
         $form->setContent("§e{$pay} {$unit}§r で修理しますか？\nあなたの所持金: §e{$have} {$unit}§r");
         $form->setButton1("はい");
         $form->setButton2("いいえ");
@@ -72,7 +73,7 @@ class Main extends PluginBase {
             if($data){
 
                 $pay = $this->config->get("money");
-                $have = EconomyAPI::getInstance()->myMoney($player);
+                $have = $api->myMoney($player);
 
                 if ($have < $pay) {
                     $player->sendMessage("§eお金が足りません");
@@ -88,9 +89,9 @@ class Main extends PluginBase {
                     $player->sendMessage("§6修理の必要がありません");
                 }
 
-                EconomyAPI::getInstance()->reduceMoney($player, $pay);
+                $api->reduceMoney($player, $pay);
                 $player->getInventory()->setItemInHand($player->getInventory()->getItemInHand()->setDamage(0));
-                $unit = EconomyAPI::getInstance()->getMonetaryUnit();
+                $unit = $api->getMonetaryUnit();
                 $player->sendMessage("§e{$pay} {$unit}§r を使用して修理しました");
 
             } else {
